@@ -22,17 +22,34 @@ namespace Nakamu
 
         [HideInInspector] public Vector3 moveDirection = Vector3.zero;
 
+        private bool isSelect = false;
+
         // Start is called before the first frame update
         void Start()
         {
             routePointer.routeRandom = new System.Random();
             rb = GetComponent<Rigidbody>();
+
         }
 
         // Update is called once per frame
         void Update()
         {
+            //経路決定
+            if (!isSelect)
+            {
+                //ヌルチェック
+                if (CheckMovePoint())
+                {
+                    SelectRoute();//経路データのIDから1つの経路を選択
+                    isSelect = true;
+                }
+            }
 
+            if (routePointer.routeID >= 0)
+            {
+
+            }
         }
 
         private void Move()
@@ -42,9 +59,9 @@ namespace Nakamu
         /// <summary>
         /// 先導経路管理クラス
         /// </summary>
+        [System.Serializable]
         public class RoutePointer
         {
-            [HideInInspector] public Dictionary<int, RouteData> routeDataDictionary; //経路データ管理変数<dataID, RouteData>
             [HideInInspector] public Dictionary<int, Transform> movePointer; //選択経路管理変数<pointID, Transform>
 
             public System.Random routeRandom; //ルート選出用ランダム変数
@@ -55,11 +72,10 @@ namespace Nakamu
         /// Dictionaryのヌルチェック
         /// </summary>
         /// <returns></returns>
-        private bool CheckDictionaries()
+        private bool CheckMovePoint()
         {
-            if (routePointer.movePointer == null && routePointer.routeDataDictionary == null)
+            if (routePointer.movePointer == null)
             {
-                routePointer.routeDataDictionary = new Dictionary<int, RouteData>();
                 routePointer.movePointer = new Dictionary<int, Transform>();
                 return false;
             }
@@ -67,34 +83,13 @@ namespace Nakamu
         }
 
         /// <summary>
-        /// インスペクター上にあるRouteDataを連想配列に格納するメソッド
-        /// </summary>
-        private void AddRouteData()
-        {
-            if (routeData == null || routeData.Length == 0)
-            {
-                Debug.LogWarning("routeDataが正しく設定されていません。");
-                return;
-            }
-
-            for (int i = 0; i < routeData.Length; i++)
-            {
-                if (!routePointer.routeDataDictionary.ContainsKey(i))
-                {
-                    routePointer.routeDataDictionary.Add(i, routeData[i]);
-                    Debug.Log($"正常に{i}の経路が追加されました。: {routeData[i].name}");
-                }
-            }
-        }
-
-        /// <summary>
         /// 経路のランダム選択メソッド
         /// </summary>
         private void SelectRoute()
         {
-            if (routePointer.routeDataDictionary.Count == 0) return;
+            if (routeData.Length == 0) return;
 
-            int routeNumber = routePointer.routeRandom.Next(routePointer.routeDataDictionary.Count);
+            int routeNumber = routePointer.routeRandom.Next(routeData.Length);
             routePointer.routeID = routeNumber;
         }
 
