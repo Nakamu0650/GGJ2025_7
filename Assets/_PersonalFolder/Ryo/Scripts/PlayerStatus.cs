@@ -7,6 +7,7 @@ public class PlayerStatus : MonoBehaviour
 {
     [SerializeField] PlayerMove player;
     [SerializeField] PlayerData status;
+    [SerializeField] float sunThreshold = 4.0f;
     private float _moveSpeed;
 
     private float damageInterval;
@@ -17,7 +18,7 @@ public class PlayerStatus : MonoBehaviour
         status.SUN = status.MaxSUN;
         status.Stamina = status.MaxStamina;
 
-        damageInterval = 3.0f;
+        damageInterval = status.DamageInterval_Normal;
     }
 
     // Update is called once per frame
@@ -26,7 +27,7 @@ public class PlayerStatus : MonoBehaviour
         // Player dead
         if (player.IsDead) return;
 
-        if (status.SUN <= 0 && !player.IsDead)
+        if (status.SUN <= 0.0f && !player.IsDead)
         {
             PlayerDead();
         }
@@ -35,19 +36,19 @@ public class PlayerStatus : MonoBehaviour
         // Player stamina
         if (player.IsMove)
         {
-            status.Stamina += 1.0f;
+            status.Stamina += status.HealStamina_Walk;
         }
         else
         {
-            status.Stamina += 10.0f;
+            status.Stamina += status.HealStamina_Wait;
         }
 
         if (player.IsMove && player.IsDash)
         {
-            status.Stamina -= 10.0f;
+            status.Stamina -= status.StaminaCost;
         }
 
-        if (status.Stamina < 0)
+        if (status.Stamina < 0.0f)
         {
             status.Stamina = 0.0f;
             player.CanDash = false;
@@ -60,7 +61,7 @@ public class PlayerStatus : MonoBehaviour
 
 
         // Player dash state
-        if (!player.CanDash && status.Stamina >= 60)
+        if (!player.CanDash && status.Stamina >= status.MinDashCost)
         {
             player.CanDash = true;
         }
@@ -69,25 +70,25 @@ public class PlayerStatus : MonoBehaviour
         // Player Damage
         if (player.IsDamage)
         {
-            if (damageInterval >= 0)
+            if (damageInterval >= 0.0f)
             {
                 damageInterval -= Time.deltaTime;
             }
             else
             {
-                status.SUN -= 10;
-                damageInterval = status.SUN < status.MaxSUN / 4.0f ? 2.0f : 3.0f;
+                status.SUN -= status.Damage;
+                damageInterval = status.SUN < status.MaxSUN / sunThreshold ? status.DamageInterval_Fast : status.DamageInterval_Normal;
             }
         }
         else
         {
-            damageInterval = status.SUN < status.MaxSUN / 4.0f ? 2.0f : 3.0f;
+            damageInterval = status.SUN < status.MaxSUN / sunThreshold ? status.DamageInterval_Fast : status.DamageInterval_Normal;
         }
     }
 
     
 
-
+    // 死亡時アニメーション
     private void PlayerDead()
     {
         if (transform.position.y >= -0.25f)
