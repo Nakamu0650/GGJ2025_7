@@ -13,7 +13,15 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   _sun: 100
-  _stamina: 3000
+  _stamina: 503
   _maxSUN: 100
   _maxStamina: 3000
   _speed: 0.1
+  _dashSpeed: 0.2
+  _healStamina_Wait: 10
+  _healStamina_Walk: 1
+  _damageInterval_Normal: 3
+  _damageInterval_Fast: 2
+  _staminaCost: 10
+  _minDashCost: 60
+  _damage: 10

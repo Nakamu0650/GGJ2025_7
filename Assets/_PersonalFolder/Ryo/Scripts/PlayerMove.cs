@@ -6,6 +6,7 @@ public class PlayerMove : MonoBehaviour
 {
     [SerializeField] PlayerData status;
     public bool IsDash { get => isDash; set => isDash = value; }
+    public bool IsWalk { get => isWalk; set => isWalk = value; }
     public bool IsMove { get => isMove; set => isMove = value; }
     public bool CanDash { get => canDash; set => canDash = value; }
     public bool IsDead { get => isDead; set => isDead = value; }
@@ -13,6 +14,7 @@ public class PlayerMove : MonoBehaviour
 
 
     private bool isDash;
+    private bool isWalk;
     private bool isMove;
     private bool canDash;
     private bool isDead;
@@ -35,20 +37,22 @@ public class PlayerMove : MonoBehaviour
     {
         if (IsDead) return;
         Move();
-        Debug.Log(isDamage);
+        //Debug.Log(isDamage);
     }
 
     private void Move()
     {
         if (Input.GetKey(KeyCode.LeftShift) && canDash)
         {
-            _moveSpeed = status.Speed * 2.0f;
+            _moveSpeed = status.DashSpeed;
             isDash = true;
+            isWalk = false;
         }
         else
         {
             _moveSpeed = status.Speed;
             isDash = false;
+            isWalk = true;
         }
 
         isMove = false;
