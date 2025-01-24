@@ -12,7 +12,7 @@ Shader "Custom/NewSurfaceShader"
         Pass
         {
             ZTest Always Cull Off ZWrite Off
-            Fog { Mode On }
+            Fog { Mode Off }
             Blend SrcAlpha OneMinusSrcAlpha
 
             CGPROGRAM
