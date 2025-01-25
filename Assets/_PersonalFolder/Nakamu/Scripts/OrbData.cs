@@ -11,7 +11,7 @@ public class OrbData : ScriptableObject
     public float DecreaseHpSpeed{ get => decreaseHpSpeed; set => decreaseHpSpeed = value; }
 
     public int HealValue { get => healValue; private set => healValue = value; }
-    public float IncreaseHpSpeed { get => IncreaseHpSpeed; set => IncreaseHpSpeed = value; }
+    public float IncreaseHpSpeed { get => increaseHpSpeed; set => increaseHpSpeed = value; }
 
 
     [SerializeField] private int maxHp = 100;
