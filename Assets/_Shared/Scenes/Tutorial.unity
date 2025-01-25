@@ -5801,11 +5801,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.779045, y: 0.028321635, z: 6.076123}
   m_Center: {x: 0.00000029797974, y: -0.011832205, z: 0.018069293}
---- !u!82 &376936882 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 1375057668065988909, guid: c6fef92c112e0784296975cf79256402, type: 3}
-  m_PrefabInstance: {fileID: 381648816}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &381648816
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17056,10 +17051,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 448462094}
   sources:
-  - {fileID: 376936882}
-  - {fileID: 1289122431}
-  - {fileID: 1533574524}
-  - {fileID: 1806434603}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   gameoverUI: {fileID: 1907805485}
 --- !u!4 &963657403
 Transform:
@@ -17507,6 +17502,8 @@ GameObject:
   - component: {fileID: 1055977778}
   - component: {fileID: 1055977777}
   - component: {fileID: 1055977776}
+  - component: {fileID: 1055977780}
+  - component: {fileID: 1055977779}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -17588,6 +17585,83 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 9.888, y: 0, z: 0}
+--- !u!114 &1055977779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055977775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: d06ef56a44939794ba423cc4b1ad79aa, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 0
+--- !u!114 &1055977780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055977775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 0}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 2
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!1 &1082949836
 GameObject:
   m_ObjectHideFlags: 0
@@ -28417,11 +28491,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281960691}
   m_CullTransparentMesh: 1
---- !u!82 &1289122431 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 3341869963126329280, guid: c6fef92c112e0784296975cf79256402, type: 3}
-  m_PrefabInstance: {fileID: 381648816}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1293816066
 GameObject:
   m_ObjectHideFlags: 0
@@ -29287,11 +29356,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.0089455, y: 0.028321635, z: 1.9981966}
   m_Center: {x: 0.018439485, y: -0.011832205, z: -0.07981348}
---- !u!82 &1533574524 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 291747481383337673, guid: c6fef92c112e0784296975cf79256402, type: 3}
-  m_PrefabInstance: {fileID: 381648816}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1563823530
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30003,11 +30067,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.0089455, y: 0.028321635, z: 1.9981966}
   m_Center: {x: 0.018439485, y: -0.011832205, z: -0.07981348}
---- !u!82 &1806434603 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 5185659360740904714, guid: c6fef92c112e0784296975cf79256402, type: 3}
-  m_PrefabInstance: {fileID: 381648816}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1826553203
 GameObject:
   m_ObjectHideFlags: 0
