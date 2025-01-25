@@ -9,7 +9,6 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] PlayerSound playerSound;
     [SerializeField] PlayerData status;
     [SerializeField] float sunThreshold = 4.0f;
-    private float _moveSpeed;
 
     private float damageInterval;
 

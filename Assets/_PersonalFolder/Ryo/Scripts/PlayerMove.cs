@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField] PlayerData status;
+    public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
     public bool IsDash { get => isDash; set => isDash = value; }
     public bool IsWalk { get => isWalk; set => isWalk = value; }
     public bool IsMove { get => isMove; set => isMove = value; }
@@ -12,6 +13,7 @@ public class PlayerMove : MonoBehaviour
     public bool IsDead { get => isDead; set => isDead = value; }
     public bool IsDamage { get => isDamage; set => isDamage = value; }
     public bool ActiveMove { get => activeMove; set => activeMove = value; }
+    public bool IsSlow { get => isSlow; set => isSlow = value; }
 
 
     private bool isDash;
@@ -21,6 +23,7 @@ public class PlayerMove : MonoBehaviour
     private bool isDead;
     private bool isDamage;
     private bool activeMove;
+    private bool isSlow;
 
     private float _moveSpeed;
 
@@ -73,6 +76,10 @@ public class PlayerMove : MonoBehaviour
 
         isMove = false;
         if (!activeMove) return;
+        if (isSlow)
+        {
+            _moveSpeed /= 4.0f;
+        }
         if (Input.GetKey(KeyCode.W))
         {
             //transform.position += transform.forward * _moveSpeed;
@@ -117,4 +124,6 @@ public class PlayerMove : MonoBehaviour
             transform.RotateAround(transform.position, Vector3.up, mx * 2.0f);
         }
     }
+
+    
 }
