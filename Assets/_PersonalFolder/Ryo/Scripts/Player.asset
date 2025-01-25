@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f36886d35c18d4e43beceb086757b852, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  _san: 100
+  _san: 0
   _stamina: 3000
   _maxSAN: 100
   _maxStamina: 3000
-  _speed: 0.02
-  _dashSpeed: 0.04
+  _speed: 0.1
+  _dashSpeed: 0.2
   _healStamina_Wait: 10
   _healStamina_Walk: 1
-  _damageInterval_Normal: 3
-  _damageInterval_Fast: 2
+  _damageInterval_Normal: 2
+  _damageInterval_Fast: 1
   _staminaCost: 10
   _minDashCost: 600
   _damage: 10
