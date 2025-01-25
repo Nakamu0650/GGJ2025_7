@@ -3,26 +3,25 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent (typeof (OrbCollider))]
 public class OrbScript : MonoBehaviour
 {
     [SerializeField] public OrbData orbData; //オーブのパラメータ
-    OrbCollider orbCol;
+    [SerializeField] public OrbCollider orbCol;
 
     [Header("ダメージ用パラメータ")]
     [SerializeField] public float damageCoolTime = 1.0f; //ダメージのインターバル
-    private float nowDamageCooltime;
+    private float nowDamageCooltime = 0.0f;
 
     [Header("回復用パラメータ")]
     [SerializeField] public float healCoolTime = 1.0f;
-    private float nowHealCoolTime;
+    private float nowHealCoolTime = 0.0f;
 
     [Header("Scale Parameters")]
     [Tooltip("HP最大時の大きさ")]
-    public Vector3 maxScale; // 初期スケール
+    [HideInInspector] public Vector3 maxScale; // 初期スケール
 
     [Tooltip("HP最小時の大きさ")]
-    public Vector3 minScale = Vector3.zero; // 最小スケール
+    [HideInInspector] public Vector3 minScale = Vector3.zero; // 最小スケール
 
     /// <summary>
     /// オーブのHP
@@ -30,33 +29,29 @@ public class OrbScript : MonoBehaviour
     public int HP 
     { 
         get => hp;
-        set {
-            if (hp > orbData.maxHP)
-                hp = orbData.maxHP;
-            else if (hp <= orbData.maxHP)
-                hp = value;
-            else if (hp < 0)
-                hp = 0;
-        }
+        set { hp = Mathf.Clamp(value, 0, orbData.maxHP); }
     }
     private int hp;
 
     void Start()
     {
         HP = orbData.maxHP;
-        orbCol = GetComponent<OrbCollider>();
         nowDamageCooltime = 0.0f;
-        maxScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        nowHealCoolTime = 0.0f;
+        maxScale = transform.localScale;
     }
 
     void Update()
     {
+        UpdateScale();
+        
+        //ダメージ処理と回復処理
         if (orbCol.isDamage)
         {
+            nowHealCoolTime = 0.0f;
             if (nowDamageCooltime < 0.0)
             {
                 OnDamage(orbData.DamageValue);
-                UpdateScale();
                 nowDamageCooltime = damageCoolTime;
             }
             else
@@ -68,7 +63,18 @@ public class OrbScript : MonoBehaviour
         {
             nowDamageCooltime = 0.0f;
 
-
+            if (HP < orbData.maxHP)
+            {
+                if (nowHealCoolTime < 0.0)
+                {
+                    OnHeal(orbData.HealValue);
+                    nowHealCoolTime = healCoolTime;
+                }
+                else
+                {
+                    nowHealCoolTime -= Time.fixedDeltaTime / orbData.IncreaseHpSpeed;
+                }
+            }
         }
 
         if (HP <= 0)
@@ -103,7 +109,7 @@ public class OrbScript : MonoBehaviour
     public void UpdateScale()
     {
         float hpAmount = HpAmount();
-        transform.localScale = Vector3.Lerp(maxScale, minScale, hpAmount);
+        transform.localScale = Vector3.Lerp(minScale,maxScale, hpAmount);
     }
 
     /// <summary>
@@ -112,6 +118,6 @@ public class OrbScript : MonoBehaviour
     /// <returns></returns>
     public float HpAmount()
     {
-        return HP / orbData.maxHP;
+        return (float)HP / orbData.maxHP;
     }
 }

@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class OrbCollider : MonoBehaviour
 {
-    [SerializeField] public OrbScript orb; //ÉIÅ[Éu
 
-    [SerializeField] public float nowCoolTime;
-    public bool isDamage = false;
+    [HideInInspector] public bool isDamage = false;
 
     void OnTriggerStay(Collider other)
     {
