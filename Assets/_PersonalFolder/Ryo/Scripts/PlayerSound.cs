@@ -7,8 +7,9 @@ public class PlayerSound : MonoBehaviour
     private PlayerMove player;
     [SerializeField] private PlayerData playerData;
 
+    public AudioSource damage;
+
     [SerializeField] private AudioSource walk;
-    [SerializeField] private AudioSource damage;
     [SerializeField] private AudioSource hurtBeat;
     [SerializeField] private AudioSource dash;
 
@@ -56,18 +57,36 @@ public class PlayerSound : MonoBehaviour
             Debug.Log("stop dash");
             dash.Stop();
             candashPlay = true;
+            
         }
-        /*
-        if (player.IsDamage && canDamagePlay)
+
+        if (playerData.SAN > playerData.MaxSAN / 2.0f)
         {
-            damage.Play();
-            canDamagePlay = false;
+            damage.pitch = 1.0f;
+            hurtBeat.pitch = 1.0f;
         }
-        else if (!player.IsDamage && !canDamagePlay)
+        else if (playerData.SAN <= playerData.MaxSAN / 2.0f && playerData.SAN > playerData.MaxSAN / 4.0f)
         {
-            canDamagePlay = true;
-            damage.Stop();
-        }*/
+            damage.pitch = 1.2f;
+            hurtBeat.pitch = 1.2f;
+        }
+        else if (playerData.SAN <= playerData.MaxSAN / 4.0f)
+        {
+            damage.pitch = 1.5f;
+            hurtBeat.pitch = 1.5f;
+        }
+
+        if (player.IsDamage && canhurtBeatPlay)
+        {
+            hurtBeat.Play();
+            canhurtBeatPlay = false;
+        }
+        else if (!player.IsDamage && !canhurtBeatPlay)
+        {
+            hurtBeat.Stop();
+            canhurtBeatPlay = true;
+        }
+
         /*
         if (player.IsMove && canWalkPlay)
         {

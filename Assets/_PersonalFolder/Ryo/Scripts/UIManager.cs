@@ -21,6 +21,6 @@ public class UIManager : MonoBehaviour
     {
         staminaL.fillAmount = status.Stamina / status.MaxStamina;
         staminaR.fillAmount = staminaL.fillAmount;
-        san.fillAmount = status.SUN / status.MaxSUN;
+        san.fillAmount = status.SAN / status.MaxSAN;
     }
 }
