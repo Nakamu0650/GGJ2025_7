@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/_PersonalFolder/Nakaji/Scenes/Title.unity
     guid: 39812cfc7795b5042957506d78117b18
   - enabled: 1
-    path: Assets/_PersonalFolder/Nakaji/Scenes/ggj.unity
+    path: Assets/_PersonalFolder/Nakaji/Scenes/Tutorial.unity
     guid: 966b960874ec92b46aca0597c6dbe452
+  - enabled: 1
+    path: Assets/_PersonalFolder/Nakaji/Scenes/Stage1.unity
+    guid: 358f6a78def0cd14da6929eb43744438
   m_configObjects: {}
