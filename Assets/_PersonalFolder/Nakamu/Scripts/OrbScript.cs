@@ -16,7 +16,6 @@ public class OrbScript : MonoBehaviour
     [SerializeField] public float healCoolTime = 1.0f;
     private float nowHealCoolTime = 0.0f;
 
-    [Header("Scale Parameters")]
     [Tooltip("HPÅ‘å‚Ì‘å‚«‚³")]
     [HideInInspector] public Vector3 maxScale; // ‰ŠúƒXƒP[ƒ‹
 
