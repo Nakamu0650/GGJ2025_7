@@ -32,6 +32,7 @@ namespace Nakamu
         private bool isSelect = false;
         private bool isStopped = false;
 
+        //[SerializeField] public float floatingeSpeed = 1.0f;
         void Awake()
         {
             if(routeSettings == null || routeSettings.Length == 0)
@@ -56,6 +57,15 @@ namespace Nakamu
         // Update is called once per frame
         void Update()
         {
+            /*
+            if (transform.position.y <= 2.0f)
+            {
+                baseVelocity.y += Time.fixedDeltaTime * floatingeSpeed;
+            }else if (transform.position.y > 2.0f)
+            {
+                baseVelocity.y -= Time.fixedDeltaTime * floatingeSpeed;
+            }*/
+
             //Œo˜HŒˆ’è
             if (!isSelect)
             {
