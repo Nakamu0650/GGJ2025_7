@@ -1,28 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ClearCollision : MonoBehaviour
 {
-    public Image gameClearUI;
+    public GameObject gameClear;
     bool stageClear;
     public string nextStageName;
-    SceneLoader loader;
 
     private void Start()
     {
-        loader = GetComponent<SceneLoader>();
     }
 
     private void Update()
     {
         if (stageClear)
-        { // ç∂É{É^ÉìÇ™âüÇ≥ÇÍÇΩèuä‘Ç…é¿çs
-            if (Input.GetMouseButtonDown(0))
+        { 
+          if (Input.GetMouseButtonDown(0))
             {
-               loader.LoadScene(nextStageName);
+                SceneManager.LoadScene(nextStageName);
             }
         }
     }
@@ -30,7 +29,7 @@ public class ClearCollision : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            gameClearUI.enabled = true;
+            gameClear.SetActive(true);
             stageClear = true;
         }
     }
