@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEditor;
 
+
 namespace Nakamu
 {
     [RequireComponent(typeof(Rigidbody))]
@@ -14,22 +15,42 @@ namespace Nakamu
         [Tooltip("移動スピード")][SerializeField]
         private float moveSpeed = 1.0f; //先導スピード
 
-        [Tooltip("先導経路データ")]
+        [Tooltip("方向回転スピード")]
         [SerializeField]
-        public RouteData[] routeData; //移動経路データ
+        private float changeAxisSpeed = 2.0f; //先導スピード
 
-        private RoutePointer routePointer;//先導経路管理クラス
+        [Tooltip("先導経路データ")]
+        [Header("経路コース配列"), SerializeField]
+        public RouteSettings[] routeSettings;
+        
+        [SerializeField] private RoutePointer routePointer;//先導経路管理クラス
+
+        [HideInInspector] public Vector3 baseVelocity; //オーブ本体のベクトル
 
         [HideInInspector] public Vector3 moveDirection = Vector3.zero;
 
         private bool isSelect = false;
+        private bool isStopped = false;
 
+        void Awake()
+        {
+            if(routeSettings == null || routeSettings.Length == 0)
+            {
+                Debug.LogWarning("正しくrouteSettingsが設定されていません。nullです。");
+            }
+
+            if (routePointer == null)
+            {
+                routePointer = new RoutePointer();
+            }
+        }
         // Start is called before the first frame update
         void Start()
         {
             routePointer.routeRandom = new System.Random();
             rb = GetComponent<Rigidbody>();
-
+            baseVelocity = Vector3.zero;
+            routePointer.leadCount = 0;
         }
 
         // Update is called once per frame
@@ -42,30 +63,66 @@ namespace Nakamu
                 if (CheckMovePoint())
                 {
                     SelectRoute();//経路データのIDから1つの経路を選択
+                    AddMovePoint();
                     isSelect = true;
                 }
             }
 
-            if (routePointer.routeID >= 0)
+            if (routePointer.routeID >= 0 && !isStopped)
             {
+                if (routePointer.leadCount < routePointer.movePointer.Count)
+                {
+                    Transform currentTarget = routePointer.movePointer[routePointer.leadCount];
+                    moveDirection = (currentTarget.transform.position - transform.position).normalized;
 
+                    Move(moveSpeed, new Vector2(moveDirection.x,moveDirection.z));
+
+                    float distance = Vector3.Distance(transform.position, currentTarget.position);
+                    if (distance < 1.0f)
+                    {
+                        routePointer.leadCount++;
+                        Debug.Log($"{routePointer.leadCount}");
+                    }
+
+                }
+                else
+                {
+                    rb.velocity = Vector3.zero;
+                    baseVelocity = Vector3.zero;
+
+                    isStopped = true;
+                    Debug.Log("ゴールまでたどり着きました。");
+                }
             }
         }
-
-        private void Move()
+        //ベクトルやもろもろ決めたら、velocityを変化
+        void LateUpdate()
         {
-
+            rb.velocity = baseVelocity;
         }
-        /// <summary>
-        /// 先導経路管理クラス
-        /// </summary>
-        [System.Serializable]
-        public class RoutePointer
-        {
-            [HideInInspector] public Dictionary<int, Transform> movePointer; //選択経路管理変数<pointID, Transform>
 
-            public System.Random routeRandom; //ルート選出用ランダム変数
-            public int routeID = -1; //経路ID用変数(初期値_-1)
+        /// <summary>
+        /// 移動メソッド。滑らかに回転をさせる
+        /// </summary>
+        /// <param name="_speed"></param>
+        /// <param name="_direction"></param>
+        private void Move(float _speed, Vector2 _direction)
+        {
+            
+            var legacyAxis = new Vector2(baseVelocity.x, baseVelocity.z);
+            Vector2 newAxis = _direction * _speed;
+
+            float value = Mathf.Clamp01(velocitySimilar(legacyAxis, newAxis) + changeAxisSpeed * Time.fixedDeltaTime);
+            Vector2 velocity = legacyAxis * (1f - value) + newAxis * value;
+            baseVelocity = new Vector3(velocity.x, baseVelocity.y, velocity.y);
+        }
+
+        private float velocitySimilar(Vector2 v1, Vector2 v2)
+        {
+            float dot;
+            dot = Vector2.Dot(v1, v2);
+            return Mathf.Clamp01((1f + dot) / 2f);
+
         }
 
         /// <summary>
@@ -87,10 +144,11 @@ namespace Nakamu
         /// </summary>
         private void SelectRoute()
         {
-            if (routeData.Length == 0) return;
+            if (routeSettings.Length == 0) return;
 
-            int routeNumber = routePointer.routeRandom.Next(routeData.Length);
+            int routeNumber = routePointer.routeRandom.Next(routeSettings.Length);
             routePointer.routeID = routeNumber;
+            Debug.Log($"経路{routePointer.routeID}に決定されました。");
         }
 
         /// <summary>
@@ -98,21 +156,48 @@ namespace Nakamu
         /// </summary>
         public void AddMovePoint()
         {
+            if (routePointer.routeID < 0 || routePointer.routeID > routeSettings.Length)
+            {
+                Debug.LogWarning("有効なrouteIDが選択されていません。");
+                return;
+            }
+
             //ヌルチェック
-            if (routeData[routePointer.routeID].MovePoint == null || routeData[routePointer.routeID].MovePoint.Length == 0)
+            if (routeSettings[routePointer.routeID].MovePoint == null || routeSettings[routePointer.routeID].MovePoint.Length == 0)
             {
                 Debug.LogWarning("MovePointが正しく設定されていません。");
                 return;
             }
 
-            for (int i = 0; i < routeData[routePointer.routeID].MovePoint.Length; i++)
+            for (int i = 0; i < routeSettings[routePointer.routeID].MovePoint.Length; i++)
             {
                 if (!routePointer.movePointer.ContainsKey(i))
                 {
-                    routePointer.movePointer.Add(i, routeData[routePointer.routeID].MovePoint[i]);
-                    Debug.Log($"正常に{i}の地点が追加されました。: {routeData[routePointer.routeID].MovePoint[i].name}");
+                    routePointer.movePointer.Add(i, routeSettings[routePointer.routeID].MovePoint[i]);
+                    Debug.Log($"正常に{i}の地点が追加されました。: {routeSettings[routePointer.routeID].MovePoint[i].name}");
                 }
             }
+        }
+
+        /// <summary>
+        /// 先導経路管理クラス
+        /// </summary>
+        public class RoutePointer
+        {
+            [HideInInspector] public Dictionary<int, Transform> movePointer; //選択経路管理変数<pointID, Transform>
+
+            public System.Random routeRandom; //ルート選出用ランダム変数
+            public int routeID = -1; //経路ID用変数(初期値_-1)
+            public int leadCount;
+        }
+
+        [System.Serializable]
+        public class RouteSettings
+        {
+            [Header("先導経路配列")]
+            [SerializeField] private Transform[] movePoint; //リードポイント格納変数
+            public Transform[] MovePoint { get => movePoint; private set => movePoint = value; }
+
         }
     }
 }
