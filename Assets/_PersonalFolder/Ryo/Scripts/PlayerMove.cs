@@ -11,6 +11,7 @@ public class PlayerMove : MonoBehaviour
     public bool CanDash { get => canDash; set => canDash = value; }
     public bool IsDead { get => isDead; set => isDead = value; }
     public bool IsDamage { get => isDamage; set => isDamage = value; }
+    public bool ActiveMove { get => activeMove; set => activeMove = value; }
 
 
     private bool isDash;
@@ -19,25 +20,40 @@ public class PlayerMove : MonoBehaviour
     private bool canDash;
     private bool isDead;
     private bool isDamage;
+    private bool activeMove;
 
     private float _moveSpeed;
+
+    private Rigidbody rb;
+    Vector3 currentPos;
 
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        currentPos = transform.position;
+
         isDash = false;
         isMove = false;
         canDash = true;
         isDead = false;
         isDamage = false;
+        activeMove = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (IsDead) return;
-        Move();
+        //Move();
+        MouseCtrl();
         //Debug.Log(isDamage);
+    }
+
+    private void FixedUpdate()
+    {
+        if (IsDead) return;
+        Move();
     }
 
     private void Move()
@@ -56,25 +72,49 @@ public class PlayerMove : MonoBehaviour
         }
 
         isMove = false;
+        if (!activeMove) return;
         if (Input.GetKey(KeyCode.W))
         {
-            transform.position += new Vector3(0.0f, 0.0f, _moveSpeed);
+            //transform.position += transform.forward * _moveSpeed;
+            rb.MovePosition(transform.position + transform.forward * _moveSpeed);
             isMove = true;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            transform.position -= new Vector3(0.0f, 0.0f, _moveSpeed);
+            //transform.position -= transform.forward * _moveSpeed;
+            rb.MovePosition(transform.position - transform.forward * _moveSpeed);
             isMove = true;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            transform.position += new Vector3(_moveSpeed, 0.0f, 0.0f);
+            //transform.position += transform.right * _moveSpeed;
+            rb.MovePosition(transform.position + transform.right * _moveSpeed);
             isMove = true;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            transform.position -= new Vector3(_moveSpeed, 0.0f, 0.0f);
+            //transform.position -= transform.right * _moveSpeed;
+            rb.MovePosition(transform.position - transform.right * _moveSpeed);
             isMove = true;
+        }
+        if (!isMove)
+        {
+            rb.MovePosition(currentPos);
+        }
+        else
+        {
+            currentPos = transform.position;
+        }
+    }
+
+    private void MouseCtrl()
+    {
+        float mx = Input.GetAxis("Mouse X");
+        float my = Input.GetAxis("Mouse Y");
+        
+        if (Mathf.Abs(mx) > 0.01f)
+        {
+            transform.RotateAround(transform.position, Vector3.up, mx * 2.0f);
         }
     }
 }

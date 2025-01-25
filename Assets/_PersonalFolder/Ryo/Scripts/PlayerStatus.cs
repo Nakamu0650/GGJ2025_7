@@ -6,19 +6,24 @@ using UnityEngine;
 public class PlayerStatus : MonoBehaviour
 {
     [SerializeField] PlayerMove player;
+    [SerializeField] PlayerSound playerSound;
     [SerializeField] PlayerData status;
     [SerializeField] float sunThreshold = 4.0f;
     private float _moveSpeed;
 
     private float damageInterval;
 
+    private bool activeMove;
+
     // Start is called before the first frame update
     void Start()
     {
-        status.SUN = status.MaxSUN;
+        status.SAN = status.MaxSAN;
         status.Stamina = status.MaxStamina;
 
         damageInterval = status.DamageInterval_Normal;
+
+        activeMove = true;
     }
 
     // Update is called once per frame
@@ -27,7 +32,7 @@ public class PlayerStatus : MonoBehaviour
         // Player dead
         if (player.IsDead) return;
 
-        if (status.SUN <= 0.0f && !player.IsDead)
+        if (status.SAN <= 0.0f && !player.IsDead)
         {
             PlayerDead();
         }
@@ -53,10 +58,21 @@ public class PlayerStatus : MonoBehaviour
             status.Stamina = 0.0f;
             player.CanDash = false;
             player.IsDash = false;
+            activeMove = false;
         }
         else if (status.Stamina > status.MaxStamina)
         {
             status.Stamina = status.MaxStamina;
+        }
+
+        if (!activeMove && status.Stamina <= 300)
+        {
+            player.ActiveMove = false;
+        }
+        else if (!activeMove && status.Stamina > 300)
+        {
+            player.ActiveMove = true;
+            activeMove = true;
         }
 
 
@@ -65,6 +81,8 @@ public class PlayerStatus : MonoBehaviour
         {
             player.CanDash = true;
         }
+
+        
 
 
         // Player Damage
@@ -76,13 +94,14 @@ public class PlayerStatus : MonoBehaviour
             }
             else
             {
-                status.SUN -= status.Damage;
-                damageInterval = status.SUN < status.MaxSUN / sunThreshold ? status.DamageInterval_Fast : status.DamageInterval_Normal;
+                status.SAN -= status.Damage;
+                playerSound.damage.Play();
+                damageInterval = status.SAN < status.MaxSAN / sunThreshold ? status.DamageInterval_Fast : status.DamageInterval_Normal;
             }
         }
         else
         {
-            damageInterval = status.SUN < status.MaxSUN / sunThreshold ? status.DamageInterval_Fast : status.DamageInterval_Normal;
+            damageInterval = status.SAN < status.MaxSAN / sunThreshold ? status.DamageInterval_Fast : status.DamageInterval_Normal;
         }
     }
 

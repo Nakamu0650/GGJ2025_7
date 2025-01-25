@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Player", menuName = "ScritableObjects/Player")]
 public class PlayerData : ScriptableObject
 {
-    public float SUN { get => _sun; set => _sun = value; }
+    public float SAN { get => _san; set => _san = value; }
     public float Stamina { get => _stamina; set => _stamina = value; }
-    public float MaxSUN { get => _maxSUN; private set => _maxSUN = value; }
+    public float MaxSAN { get => _maxSAN; private set => _maxSAN = value; }
     public float MaxStamina { get => _maxStamina; private set => _maxStamina = value; }
     public float Speed { get =>  _speed; private set => _speed = value;}
     public float DashSpeed { get => _dashSpeed; private set => _dashSpeed = value; }
@@ -23,11 +21,11 @@ public class PlayerData : ScriptableObject
 
     //[SerializeField] float _hp;
     [Header("現在のSUN値")]
-    [SerializeField] float _sun;
+    [SerializeField] float _san;
     [Header("現在のスタミナ")]
     [SerializeField] float _stamina;
     [Header("最大SUN値")]
-    [SerializeField] float _maxSUN;
+    [SerializeField] float _maxSAN;
     [Header("最大スタミナ")]
     [SerializeField] float _maxStamina;
     [Header("常時移動")]
