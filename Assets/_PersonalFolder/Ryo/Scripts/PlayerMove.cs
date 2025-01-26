@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
@@ -28,12 +29,19 @@ public class PlayerMove : MonoBehaviour
     private float _moveSpeed;
 
     private Rigidbody rb;
+    private Animator animator;
+
+    
     Vector3 currentPos;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+        animator.SetBool("isWalk", false);
+        animator.SetBool("isDash", false);
+
         currentPos = transform.position;
 
         isDash = false;
@@ -47,7 +55,7 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsDead) return;
+        if (isDead) return;
         //Move();
         MouseCtrl();
         //Debug.Log(isDamage);
@@ -55,7 +63,7 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (IsDead) return;
+        if (isDead) return;
         Move();
     }
 
@@ -66,12 +74,16 @@ public class PlayerMove : MonoBehaviour
             _moveSpeed = status.DashSpeed;
             isDash = true;
             isWalk = false;
+            animator.SetBool("isWalk", false);
+            animator.SetBool("isDash", true);
         }
         else
         {
             _moveSpeed = status.Speed;
             isDash = false;
             isWalk = true;
+            animator.SetBool("isWalk", true);
+            animator.SetBool("isDash", false);
         }
 
         isMove = false;
@@ -79,6 +91,17 @@ public class PlayerMove : MonoBehaviour
         if (isSlow)
         {
             _moveSpeed /= 4.0f;
+        }
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position + new Vector3(0.0f, 0.7f * transform.localScale.y, 0.0f), 0.1f, transform.forward, 0.5f);//Rayを飛ばし、ヒットしたオブジェクト群を配列に格納             
+        hits = hits.OrderBy(hit => hit.distance).ToArray();//配列を距離ごとの昇順に並び替え
+        Debug.DrawRay(transform.position + new Vector3(0.0f, 0.7f * transform.localScale.y, 0.0f), transform.forward * 0.5f, Color.green, 0.5f);
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.gameObject.CompareTag("Stage"))
+            {
+                Debug.Log("stop");
+                return;
+            }
         }
         if (Input.GetKey(KeyCode.W))
         {

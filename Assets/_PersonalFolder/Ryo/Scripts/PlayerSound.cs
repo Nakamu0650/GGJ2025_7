@@ -12,11 +12,15 @@ public class PlayerSound : MonoBehaviour
     [SerializeField] private AudioSource walk;
     [SerializeField] private AudioSource hurtBeat;
     [SerializeField] private AudioSource dash;
+    [SerializeField] private AudioSource lose;
 
     private bool canWalkPlay;
     private bool canDamagePlay;
-    private bool canhurtBeatPlay;
-    private bool candashPlay;
+    private bool canHurtBeatPlay;
+    private bool canDashPlay;
+    private bool canLosePlay;
+
+    private Animator animator;
 
 
     // Start is called before the first frame update
@@ -27,38 +31,54 @@ public class PlayerSound : MonoBehaviour
 
         canWalkPlay = true;
         canDamagePlay = true;
-        canhurtBeatPlay = true;
-        candashPlay = true;
-}
+        canHurtBeatPlay = true;
+        canDashPlay = true;
+        canLosePlay = true;
+
+        animator = GetComponent<Animator>();
+        animator.SetBool("isMove", false);
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (player.IsMove && player.IsWalk && !player.IsDash && canWalkPlay)
+        //Debug.Log($"move:{player.IsMove}, cwalk:{canWalkPlay}, cdash:{canDashPlay}");
+
+        
+        if (player.IsMove && player.IsWalk && canWalkPlay)
         {
+            Debug.Log("Play walk");
+            animator.SetBool("isMove", true);
             walk.Play();
+            dash.Stop();
+            canDashPlay = true;
             canWalkPlay = false;
         }
         else if (!player.IsMove && !canWalkPlay)
         {
             Debug.Log("stop walk");
+            animator.SetBool("isMove", false);
             walk.Stop();
             canWalkPlay = true;
         }
 
-        if (player.IsMove && player.IsDash && candashPlay)
+        if (player.IsMove && player.IsDash && canDashPlay)
         {
+            animator.SetBool("isMove", true);
             dash.Play();
             walk.Stop();
-            candashPlay = false;
+            canWalkPlay = true;
+            canDashPlay = false;
         }
-        else if (!player.IsMove && !candashPlay || playerData.Stamina <= 0.0f)
+        else if (!player.IsMove && !canDashPlay || playerData.Stamina <= 0.0f)
         {
             Debug.Log("stop dash");
+            animator.SetBool("isMove", false);
             dash.Stop();
-            candashPlay = true;
+            canDashPlay = true;
             
         }
+        
 
         if (playerData.SAN > playerData.MaxSAN / 2.0f)
         {
@@ -76,28 +96,28 @@ public class PlayerSound : MonoBehaviour
             hurtBeat.pitch = 1.5f;
         }
 
-        if (player.IsDamage && canhurtBeatPlay)
+        if (player.IsDamage && canHurtBeatPlay)
         {
             hurtBeat.Play();
-            canhurtBeatPlay = false;
+            canHurtBeatPlay = false;
         }
-        else if (!player.IsDamage && !canhurtBeatPlay)
+        else if (!player.IsDamage && !canHurtBeatPlay)
         {
             hurtBeat.Stop();
-            canhurtBeatPlay = true;
+            canHurtBeatPlay = true;
         }
 
-        /*
-        if (player.IsMove && canWalkPlay)
+        
+        if (player.IsDead && canLosePlay)
         {
-            walk.Play();
-            canWalkPlay = false;
+            lose.Play();
+            canLosePlay = false;
         }
-        else if (!player.IsMove && !canWalkPlay)
+        else if (!player.IsDead && !canLosePlay)
         {
-            canWalkPlay = true;
-            walk.Stop();
+            canLosePlay = true;
+            lose.Stop();
         }
-        */
+        
     }
 }
