@@ -114,6 +114,10 @@ public class PlayerStatus : MonoBehaviour
             else
             {
                 status.SAN += 10.0f;
+                if (status.SAN >= status.MaxSAN)
+                {
+                    status.SAN = status.MaxSAN;
+                }
                 healInterval = 3.0f;
             }
             damageInterval = status.SAN < status.MaxSAN / sunThreshold ? status.DamageInterval_Fast : status.DamageInterval_Normal;
