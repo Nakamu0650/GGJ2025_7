@@ -118,3 +118,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751a33ad86d2c464cb3163146bad8f79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walk: {fileID: 0}
+  dash: {fileID: 0}
+  mud_walk: {fileID: 8300000, guid: 2712ad7aa13e3024a973d3af42865511, type: 3}
+  mud_dash: {fileID: 8300000, guid: 1a11065c2666809498ff2c8adba2b234, type: 3}
+  solid_walk: {fileID: 8300000, guid: 163c1d2794f5c0a40b841059879869cf, type: 3}
+  solid_dash: {fileID: 8300000, guid: e8cbc54cdc5b0aa4a95c497bdc6e7e63, type: 3}

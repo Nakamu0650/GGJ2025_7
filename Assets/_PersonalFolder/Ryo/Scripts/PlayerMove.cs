@@ -15,6 +15,7 @@ public class PlayerMove : MonoBehaviour
     public bool IsDamage { get => isDamage; set => isDamage = value; }
     public bool ActiveMove { get => activeMove; set => activeMove = value; }
     public bool IsSlow { get => isSlow; set => isSlow = value; }
+    public bool IsChangeClip { get => isChangeClip; set => isChangeClip = value; }
 
 
     private bool isDash;
@@ -25,6 +26,7 @@ public class PlayerMove : MonoBehaviour
     private bool isDamage;
     private bool activeMove;
     private bool isSlow;
+    private bool isChangeClip;
 
     private float _moveSpeed;
 
@@ -50,6 +52,7 @@ public class PlayerMove : MonoBehaviour
         isDead = false;
         isDamage = false;
         activeMove = true;
+        isChangeClip = false;
     }
 
     // Update is called once per frame

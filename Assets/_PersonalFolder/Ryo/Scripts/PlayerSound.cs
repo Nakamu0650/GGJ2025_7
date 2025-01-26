@@ -44,6 +44,12 @@ public class PlayerSound : MonoBehaviour
     {
         //Debug.Log($"move:{player.IsMove}, cwalk:{canWalkPlay}, cdash:{canDashPlay}");
 
+        if (player.IsChangeClip)
+        {
+            canWalkPlay = true;
+            canDashPlay= true;
+            player.IsChangeClip = false;
+        }
         
         if (player.IsMove && player.IsWalk && canWalkPlay)
         {
@@ -53,6 +59,7 @@ public class PlayerSound : MonoBehaviour
             dash.Stop();
             canDashPlay = true;
             canWalkPlay = false;
+            player.IsChangeClip = false;    
         }
         else if (!player.IsMove && !canWalkPlay)
         {
@@ -69,6 +76,7 @@ public class PlayerSound : MonoBehaviour
             walk.Stop();
             canWalkPlay = true;
             canDashPlay = false;
+            player.IsChangeClip = false;
         }
         else if (!player.IsMove && !canDashPlay || playerData.Stamina <= 0.0f)
         {
