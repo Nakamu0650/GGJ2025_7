@@ -19,7 +19,7 @@ public class OrbColorChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        alpha = Mathf.Lerp(0, 1, orbScript.HpAmount());
+        alpha = Mathf.Lerp(0, 1, orbScript.HpAmount() * 1.5f);
         mesh.material.SetColor("_Color", new Color(1.0f, 1.0f, 1.0f, alpha));  
     }
 }
