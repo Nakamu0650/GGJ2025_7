@@ -1,26 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
-[ExecuteInEditMode]
+
 public class CameraEffect : MonoBehaviour
 {
-    public Material effectMaterial;
+    [SerializeField] private PlayerData playerData;
+    private PostProcessVolume processVolume;
+    private Vignette vignette;
 
-    [Range(0, 1)] public float blurStrength = 0.5f;
-    [Range(0, 1)] public float darkenStrength = 0.5f;
-
-    private void OnRenderImage(RenderTexture src, RenderTexture dest)
+    private void Start()
     {
-        if (effectMaterial != null)
+        processVolume = GetComponent<PostProcessVolume>();
+        processVolume.profile.TryGetSettings(out vignette);
+        vignette.intensity.value = 0.0f;
+    }
+
+    private void Update()
+    {
+        if (playerData.SAN <= playerData.MaxSAN * 0.05f)
         {
-            effectMaterial.SetFloat("_BlurStrength", blurStrength);
-            effectMaterial.SetFloat("_DarkenStrength", darkenStrength);
-            Graphics.Blit(src, dest, effectMaterial);
+            vignette.intensity.value = 1.0f;
         }
         else
         {
-            Graphics.Blit(src, dest);
+            vignette.intensity.value = 1.0f - playerData.SAN / playerData.MaxSAN;
         }
     }
 }

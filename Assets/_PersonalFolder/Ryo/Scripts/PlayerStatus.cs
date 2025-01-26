@@ -11,8 +11,11 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] float sunThreshold = 4.0f;
 
     private float damageInterval;
+    private float healInterval;
 
     private bool activeMove;
+
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -21,8 +24,11 @@ public class PlayerStatus : MonoBehaviour
         status.Stamina = status.MaxStamina;
 
         damageInterval = status.DamageInterval_Normal;
+        healInterval = 3.0f;
 
         activeMove = true;
+        animator = GetComponent<Animator>();
+        animator.SetBool("isDead", false);
     }
 
     // Update is called once per frame
@@ -97,9 +103,19 @@ public class PlayerStatus : MonoBehaviour
                 playerSound.damage.Play();
                 damageInterval = status.SAN < status.MaxSAN / sunThreshold ? status.DamageInterval_Fast : status.DamageInterval_Normal;
             }
+            healInterval = 3.0f;
         }
         else
         {
+            if (healInterval >= 0.0f)
+            {
+                healInterval -= Time.deltaTime;
+            }
+            else
+            {
+                status.SAN += 10.0f;
+                healInterval = 3.0f;
+            }
             damageInterval = status.SAN < status.MaxSAN / sunThreshold ? status.DamageInterval_Fast : status.DamageInterval_Normal;
         }
     }
@@ -109,6 +125,7 @@ public class PlayerStatus : MonoBehaviour
     // 死亡時アニメーション
     private void PlayerDead()
     {
+        /*
         if (transform.position.y >= -0.25f)
         {
             transform.Translate(new Vector3(0.0f, -0.05f, 0.0f));
@@ -117,6 +134,8 @@ public class PlayerStatus : MonoBehaviour
         {
             player.IsDead = true;
         }
-        
+        */
+        animator.SetBool("isDead", true);
+        player.IsDead = true;
     }
 }

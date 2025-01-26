@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f36886d35c18d4e43beceb086757b852, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  _san: 0
+  _san: 130
   _stamina: 3000
   _maxSAN: 100
   _maxStamina: 3000
