@@ -5429,6 +5429,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.0089455, y: 0.028321635, z: 1.9981966}
   m_Center: {x: 0.018439485, y: -0.011832205, z: -0.07981348}
+--- !u!1 &264648059 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8854335668216172723, guid: 7c2dc282e6109e349a992e1640f007b8, type: 3}
+  m_PrefabInstance: {fileID: 9088406330581526788}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &290346669
 GameObject:
   m_ObjectHideFlags: 0
@@ -35841,6 +35846,10 @@ PrefabInstance:
       propertyPath: routeSettings.Array.data[0].movePoint.Array.data[4]
       value: 
       objectReference: {fileID: 895402107}
+    - target: {fileID: 6095222339655790001, guid: 7c2dc282e6109e349a992e1640f007b8, type: 3}
+      propertyPath: orbPrefab
+      value: 
+      objectReference: {fileID: 264648059}
     - target: {fileID: 8274648240118144228, guid: 7c2dc282e6109e349a992e1640f007b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 32
