@@ -46,7 +46,14 @@ namespace Nakamu
         private bool isSelect = false;
         private bool isStopped = false;
 
-        //[SerializeField] public float floatingeSpeed = 1.0f;
+        [Header("Y²ƒTƒCƒ“ƒJ[ƒu‚Ìİ’è")]
+        [Tooltip("ã‰º‰^“®‚ÌU•")]
+        [SerializeField] private float sineAmplitude = 5f;
+
+        [Tooltip("ã‰º‰^“®‚Ìü”g”")]
+        [SerializeField] private float sineFrequency = 1.0f;
+
+        private float initialY;
         void Awake()
         {
             if(routeSettings == null || routeSettings.Length == 0)
@@ -67,19 +74,15 @@ namespace Nakamu
             rb = GetComponent<Rigidbody>();
             baseVelocity = Vector3.zero;
             routePointer.leadCount = 0;
+
+            initialY = transform.position.y;
         }
 
         // Update is called once per frame
         void Update()
         {
-            /*
-            if (transform.position.y <= 2.0f)
-            {
-                baseVelocity.y += Time.fixedDeltaTime * floatingeSpeed;
-            }else if (transform.position.y > 2.0f)
-            {
-                baseVelocity.y -= Time.fixedDeltaTime * floatingeSpeed;
-            }*/
+            float sineOffset = Mathf.Sin(Time.time * sineFrequency) * sineAmplitude;
+            transform.position = new Vector3(transform.position.x, initialY + sineOffset, transform.position.z);
 
             //Œo˜HŒˆ’è
             if (!isSelect)
