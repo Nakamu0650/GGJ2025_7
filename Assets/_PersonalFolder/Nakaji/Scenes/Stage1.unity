@@ -2052,6 +2052,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!82 &587096193 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2644607238504718843, guid: c6fef92c112e0784296975cf79256402, type: 3}
+  m_PrefabInstance: {fileID: 1885330437}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &587650231 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4786694576209449284, guid: 78ab72d7094de8645b3dc5f36d3bb2fd, type: 3}
@@ -6666,6 +6671,7 @@ MonoBehaviour:
   - {fileID: 1218151639}
   tilteSceneName: Title
   nextSceneName: Stage2
+  gameclearSE: {fileID: 587096193}
   gameoverUI: {fileID: 1158090165}
   gameclearUI: {fileID: 1866106237}
 --- !u!4 &1530158671
