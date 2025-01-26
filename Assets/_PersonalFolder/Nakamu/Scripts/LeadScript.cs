@@ -105,7 +105,16 @@ namespace Nakamu
                     moveDirection = (currentTarget.transform.position - transform.position).normalized;
 
                     SelectAccel();
+                    foreach (var item in routePointer.movePointer)
+                    {
+                        if (currentTarget == routePointer.movePointer[routePointer.movePointer.Count % 3])
+                        {
+                            Move(moveSpeed * 10, new Vector2(moveDirection.x, moveDirection.z));
+
+                        }
+                    }
                     Move(moveSpeed, new Vector2(moveDirection.x,moveDirection.z));
+                   
 
                     float distance = Vector3.Distance(transform.position, currentTarget.position);
                     if (distance < 1.0f)
