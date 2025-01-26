@@ -6,7 +6,7 @@ using UnityEngine;
 public class OrbScript : MonoBehaviour
 {
     [SerializeField] public OrbData orbData; //オーブのパラメータ
-    [SerializeField] public OrbCollider orbCol;
+    [SerializeField] public OrbCollider orbCol; //オーブのコライダー
 
     [Header("ダメージ用パラメータ")]
     [SerializeField] public float damageCoolTime = 1.0f; //ダメージのインターバル
@@ -20,7 +20,7 @@ public class OrbScript : MonoBehaviour
     [HideInInspector] public Vector3 maxScale; // 初期スケール
 
     [Tooltip("HP最小時の大きさ")]
-    [HideInInspector] public Vector3 minScale = Vector3.zero; // 最小スケール
+    [HideInInspector] public Vector3 minScale = new Vector3(0, 0, 0); // 最小スケール
 
     /// <summary>
     /// オーブのHP
@@ -78,7 +78,7 @@ public class OrbScript : MonoBehaviour
 
         if (HP <= 0)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 
@@ -108,7 +108,7 @@ public class OrbScript : MonoBehaviour
     public void UpdateScale()
     {
         float hpAmount = HpAmount();
-        transform.localScale = Vector3.Lerp(minScale,maxScale, hpAmount);
+        transform.localScale = Vector3.Lerp(minScale,maxScale, (int)hpAmount);
     }
 
     /// <summary>
