@@ -19,6 +19,20 @@ namespace Nakamu
         [SerializeField]
         private float changeAxisSpeed = 2.0f; //先導スピード
 
+        [Tooltip("最大加速度")]
+        [SerializeField]
+        private float maxAccel = 1.5f; //最大加速度
+
+        [Tooltip("等倍")]
+        [SerializeField]
+        private float  midAccel= 1.0f; //等倍
+
+        [Tooltip("最低加速度")]
+        [SerializeField]
+        private float minAccel = 0.5f; //先導スピード
+
+        [SerializeField] private Dictionary<int, float> accel;
+
         [Tooltip("先導経路データ")]
         [Header("経路コース配列"), SerializeField]
         public RouteSettings[] routeSettings;
@@ -49,6 +63,7 @@ namespace Nakamu
         void Start()
         {
             routePointer.routeRandom = new System.Random();
+            routePointer.accelRandom = new System.Random();
             rb = GetComponent<Rigidbody>();
             baseVelocity = Vector3.zero;
             routePointer.leadCount = 0;
@@ -72,6 +87,7 @@ namespace Nakamu
                 //ヌルチェック
                 if (CheckMovePoint())
                 {
+                    AddAccel();
                     SelectRoute();//経路データのIDから1つの経路を選択
                     AddMovePoint();
                     isSelect = true;
@@ -85,6 +101,7 @@ namespace Nakamu
                     Transform currentTarget = routePointer.movePointer[routePointer.leadCount];
                     moveDirection = (currentTarget.transform.position - transform.position).normalized;
 
+                    SelectAccel();
                     Move(moveSpeed, new Vector2(moveDirection.x,moveDirection.z));
 
                     float distance = Vector3.Distance(transform.position, currentTarget.position);
@@ -120,7 +137,7 @@ namespace Nakamu
         {
             
             var legacyAxis = new Vector2(baseVelocity.x, baseVelocity.z);
-            Vector2 newAxis = _direction * _speed;
+            Vector2 newAxis = _direction * _speed * accel[routePointer.accelID];
 
             float value = Mathf.Clamp01(velocitySimilar(legacyAxis, newAxis) + changeAxisSpeed * Time.fixedDeltaTime);
             Vector2 velocity = legacyAxis * (1f - value) + newAxis * value;
@@ -144,6 +161,7 @@ namespace Nakamu
             if (routePointer.movePointer == null)
             {
                 routePointer.movePointer = new Dictionary<int, Transform>();
+                accel = new Dictionary<int, float>();
                 return false;
             }
             return true;
@@ -190,6 +208,28 @@ namespace Nakamu
         }
 
         /// <summary>
+        /// 加速度を連想配列に追加
+        /// </summary>
+        public void AddAccel()
+        {
+            accel.Add(0, minAccel);
+            accel.Add(1, midAccel);
+            accel.Add(2, maxAccel);
+            Debug.Log($"正常に加速度が追加されました。");
+        }
+
+        /// <summary>
+        /// ランダム加速度選択メソッド
+        /// </summary>
+        private void SelectAccel()
+        {
+            if (accel.Count == 0) return;
+            int accelNumber = routePointer.accelRandom.Next(accel.Count);
+            routePointer.accelID = accelNumber;
+            Debug.Log($"加速度：{routePointer.accelID}に決定されました。");
+        }
+
+        /// <summary>
         /// 先導経路管理クラス
         /// </summary>
         public class RoutePointer
@@ -197,7 +237,9 @@ namespace Nakamu
             [HideInInspector] public Dictionary<int, Transform> movePointer; //選択経路管理変数<pointID, Transform>
 
             public System.Random routeRandom; //ルート選出用ランダム変数
+            public System.Random accelRandom; //加速度選出用ランダム変数
             public int routeID = -1; //経路ID用変数(初期値_-1)
+            public int accelID = -1; //加速度ID用変数(初期値_-1)
             public int leadCount;
         }
 
