@@ -7,6 +7,7 @@ public class OrbScript : MonoBehaviour
 {
     [SerializeField] public OrbData orbData; //オーブのパラメータ
     [SerializeField] public OrbCollider orbCol; //オーブのコライダー
+    [SerializeField] public GameObject orbPrefab;
 
     [Header("ダメージ用パラメータ")]
     [SerializeField] public float damageCoolTime = 1.0f; //ダメージのインターバル
@@ -76,9 +77,10 @@ public class OrbScript : MonoBehaviour
             }
         }
 
-        if (HP <= 0)
+        if (HP == 0)
         {
-            Destroy(gameObject);
+            Destroy(orbPrefab);
+            orbPrefab.GetComponent<OrbScript>().enabled = false;
         }
     }
 
@@ -108,7 +110,7 @@ public class OrbScript : MonoBehaviour
     public void UpdateScale()
     {
         float hpAmount = HpAmount();
-        transform.localScale = Vector3.Lerp(minScale,maxScale, (int)hpAmount);
+        transform.localScale = Vector3.Lerp(minScale,maxScale, hpAmount);
     }
 
     /// <summary>
