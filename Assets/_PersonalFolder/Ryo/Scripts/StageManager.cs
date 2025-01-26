@@ -9,12 +9,14 @@ public class StageManager : MonoBehaviour
     [SerializeField] List<AudioSource> sources;
     [SerializeField] string tilteSceneName;
     [SerializeField] string nextSceneName;
+    [SerializeField] AudioSource gameclearSE;
 
     [SerializeField] GameObject gameoverUI;
     [SerializeField] GameObject gameclearUI;
  
     private float interval;
     private float clearInterval;
+    private bool isRead;
     
     // Start is called before the first frame update
     void Start()
@@ -22,6 +24,7 @@ public class StageManager : MonoBehaviour
         Time.timeScale = 1.0f;
         interval = 2.0f;
         clearInterval = 3.0f;
+        isRead = true;
     }
 
     // Update is called once per frame
@@ -39,6 +42,11 @@ public class StageManager : MonoBehaviour
 
         if (gameclearUI.activeSelf)
         {
+            if (isRead)
+            {
+                gameclearSE.Play();
+                isRead = false;
+            }
             foreach (var source in sources)
             {
                 source.Stop();
