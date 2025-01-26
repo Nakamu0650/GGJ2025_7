@@ -9,11 +9,12 @@ public class CameraEffect_URP : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     private Volume volume;
     private Vignette vignette;
+    [SerializeField] private GameObject gv;
 
     private void Start()
     {
         // Volumeコンポーネントを取得
-        volume = GetComponent<Volume>();
+        volume = gv.GetComponent<Volume>();
         if (volume == null)
         {
             Debug.LogError("Volume component is missing on this GameObject.");
