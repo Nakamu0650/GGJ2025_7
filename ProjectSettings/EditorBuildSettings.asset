@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_PersonalFolder/Nakaji/Scenes/Stage1.unity
     guid: 358f6a78def0cd14da6929eb43744438
+  - enabled: 1
+    path: Assets/_PersonalFolder/Nakaji/Scenes/Stage2.unity
+    guid: db2fcaa58ec01f442ad2b2013a12584e
   m_configObjects: {}
