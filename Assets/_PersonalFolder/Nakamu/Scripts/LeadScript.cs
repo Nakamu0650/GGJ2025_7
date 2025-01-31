@@ -106,6 +106,7 @@ namespace Nakamu
 
                     SelectAccel();
 
+                    //移動メソッド…特定のカウント時に急加速させる
                     if (routePointer.leadCount % 3 == 0 && routePointer.leadCount != 0)
                     {
                         Move(moveSpeed * 2, new Vector2(moveDirection.x, moveDirection.z));
@@ -251,13 +252,13 @@ namespace Nakamu
             public int leadCount;
         }
 
+        //先導経路の地点管理クラス
         [System.Serializable]
         public class RouteSettings
         {
             [Header("先導経路配列")]
             [SerializeField] private Transform[] movePoint; //リードポイント格納変数
             public Transform[] MovePoint { get => movePoint; private set => movePoint = value; }
-
         }
     }
 }
