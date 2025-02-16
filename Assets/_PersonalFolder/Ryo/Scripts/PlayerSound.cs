@@ -86,8 +86,8 @@ public class PlayerSound : MonoBehaviour
             canDashPlay = true;
             
         }
-        
 
+        /*
         if (playerData.SAN > playerData.MaxSAN / 2.0f)
         {
             damage.pitch = 1.0f;
@@ -102,7 +102,11 @@ public class PlayerSound : MonoBehaviour
         {
             damage.pitch = 1.5f;
             hurtBeat.pitch = 1.5f;
-        }
+        }*/
+
+        // ダメージ時の心音と動悸のピッチを上げる(MaxSAN ~ 0 → 1.0f ~ 1.5f)
+        damage.pitch = Mathf.Lerp(1.5f, 1.0f, HPAmount());
+        hurtBeat.pitch = Mathf.Lerp(1.5f, 1.0f, HPAmount());
 
         if (player.IsDamage && canHurtBeatPlay)
         {
@@ -127,5 +131,10 @@ public class PlayerSound : MonoBehaviour
             lose.Stop();
         }
         
+    }
+
+    public float HPAmount()
+    {
+        return playerData.SAN / playerData.MaxSAN;
     }
 }
